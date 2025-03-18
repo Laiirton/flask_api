@@ -100,6 +100,9 @@ class UserService:
         Retorna o usuário ou uma mensagem de erro
         """
         try:
+            # Converte para inteiro caso seja string
+            user_id = int(user_id)
+            
             # Conecta ao Supabase
             supabase = Config.get_supabase_client()
             
@@ -113,6 +116,8 @@ class UserService:
             # Retorna usuário
             return User.from_dict(response.data[0]), None
             
+        except ValueError:
+            return None, "ID de usuário inválido"
         except Exception as e:
             return None, str(e)
     
@@ -145,6 +150,9 @@ class UserService:
         Retorna o usuário atualizado ou uma mensagem de erro
         """
         try:
+            # Converte para inteiro caso seja string
+            user_id = int(user_id)
+            
             # Conecta ao Supabase
             supabase = Config.get_supabase_client()
             
@@ -161,6 +169,8 @@ class UserService:
             # Retorna usuário atualizado
             return User.from_dict(response.data[0]), None
             
+        except ValueError:
+            return None, "ID de usuário inválido"
         except Exception as e:
             return None, str(e)
     
@@ -171,6 +181,9 @@ class UserService:
         Retorna status de sucesso e mensagem de erro opcional
         """
         try:
+            # Converte para inteiro caso seja string
+            user_id = int(user_id)
+            
             # Conecta ao Supabase
             supabase = Config.get_supabase_client()
             
@@ -184,5 +197,7 @@ class UserService:
             # Retorna sucesso
             return True, None
             
+        except ValueError:
+            return False, "ID de usuário inválido"
         except Exception as e:
             return False, str(e)
