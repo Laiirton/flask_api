@@ -1,6 +1,10 @@
 import os
 from dotenv import load_dotenv
 from supabase import create_client, Client
+import logging
+
+# Configuração de logging
+logger = logging.getLogger(__name__)
 
 # Carrega variáveis de ambiente
 load_dotenv()
@@ -12,6 +16,11 @@ class Config:
     SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
     JWT_ACCESS_TOKEN_EXPIRES = int(os.environ.get('JWT_ACCESS_TOKEN_EXPIRES', 3600))
+    
+    def __init__(self):
+        # Log das configurações importantes para depuração
+        logger.info(f"SECRET_KEY configurada: {self.SECRET_KEY[:5]}..." if self.SECRET_KEY else "SECRET_KEY não configurada!")
+        logger.info(f"JWT_SECRET_KEY configurada: {self.JWT_SECRET_KEY[:5]}..." if self.JWT_SECRET_KEY else "JWT_SECRET_KEY não configurada!")
     
     @staticmethod
     def get_supabase_client() -> Client:
