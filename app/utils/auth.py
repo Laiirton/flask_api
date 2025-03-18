@@ -1,4 +1,5 @@
-from datetime import datetime, timedelta, UTC
+from datetime import datetime, timedelta
+import pytz
 import jwt
 from functools import wraps
 from flask import request, jsonify, current_app
@@ -9,9 +10,9 @@ def generate_token(user_data: Dict[str, Any], secret_key: str, expiry_hours: int
     Gera um token JWT para o usuário
     """
     payload = {
-        'exp': datetime.now(UTC) + timedelta(hours=expiry_hours),
-        'iat': datetime.now(UTC),
-        'sub': str(user_data['id']),  # Convertendo ID para string para evitar erros de validação
+        'exp': datetime.now(pytz.UTC) + timedelta(hours=expiry_hours),
+        'iat': datetime.now(pytz.UTC),
+        'sub': str(user_data['id']), 
         'cpf': user_data['cpf'],
         'role': user_data['role']
     }
