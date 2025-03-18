@@ -1,10 +1,6 @@
 from flask import Blueprint, request, jsonify, current_app
 from app.services.user_service import UserService
 from app.utils.auth import generate_token, token_required, admin_required
-import logging
-
-# Configuração de logging
-logger = logging.getLogger(__name__)
 
 # Cria blueprint
 user_bp = Blueprint('user', __name__, url_prefix='/api/users')
@@ -47,13 +43,8 @@ def login():
     
     # Gera token
     secret_key = current_app.config['SECRET_KEY']
-    logger.info(f"Gerando token com chave: {secret_key[:5]}...")
-    
     user_dict = user.to_dict()
-    logger.info(f"Dados do usuário para token: ID={user_dict['id']}, Role={user_dict['role']}")
-    
     token = generate_token(user_dict, secret_key)
-    logger.info(f"Token gerado: {token[:15]}...")
     
     # Retorna token e dados do usuário
     return jsonify({
@@ -149,15 +140,10 @@ def get_current_user():
     """
     Obter o usuário atualmente logado
     """
-    logger.info(f"Acessando rota /me com user_id={request.user_id}")
-    
     user, error = UserService.get_user_by_id(request.user_id)
     
     if error:
-        logger.error(f"Erro ao buscar usuário: {error}")
         return jsonify({'error': error}), 404
-    
-    logger.info(f"Usuário encontrado: {user.id}")
     
     # Retorna dados do usuário
     return jsonify({
