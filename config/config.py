@@ -17,6 +17,11 @@ class Config:
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
     JWT_ACCESS_TOKEN_EXPIRES = int(os.environ.get('JWT_ACCESS_TOKEN_EXPIRES', 3600))
     
+    # Configurações do CORS
+    CORS_HEADERS = 'Content-Type'
+    CORS_ORIGINS = ['http://localhost:3000', 'https://localhost:3000']
+    CORS_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+    
     def __init__(self):
         # Log das configurações importantes para depuração
         logger.info(f"SECRET_KEY configurada: {self.SECRET_KEY[:5]}..." if self.SECRET_KEY else "SECRET_KEY não configurada!")

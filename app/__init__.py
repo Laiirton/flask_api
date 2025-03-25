@@ -12,8 +12,14 @@ def create_app(config_class=Config):
     # Configura a aplicação
     app.config.from_object(config_class)
     
-    # Habilita CORS
-    CORS(app)
+    # Configura CORS com as configurações específicas
+    CORS(app, resources={
+        r"/*": {
+            "origins": app.config['CORS_ORIGINS'],
+            "methods": app.config['CORS_METHODS'],
+            "allow_headers": app.config['CORS_HEADERS']
+        }
+    })
     
     # Registra blueprints
     from app.routes.user_routes import user_bp
