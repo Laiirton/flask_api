@@ -14,7 +14,7 @@ def create_app(config_class=Config):
     
     # Configura CORS para toda a aplicação
     CORS(app, 
-         resources={r"/api/*": {"origins": "*"}},
+         resources={r"/api/*": {"origins": ["http://localhost:3000"]}},
          supports_credentials=True,
          allow_headers=["Content-Type", "Authorization"],
          methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
