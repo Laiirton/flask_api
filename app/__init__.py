@@ -12,14 +12,12 @@ def create_app(config_class=Config):
     # Configura a aplicação
     app.config.from_object(config_class)
     
-    # Configura CORS especificamente para rotas /api
-    CORS(app, resources={
-        r"/api/*": {
-            "origins": app.config['CORS_ORIGINS'],
-            "methods": app.config['CORS_METHODS'],
-            "allow_headers": app.config['CORS_HEADERS']
-        }
-    })
+    # Configura CORS para toda a aplicação
+    CORS(app, 
+         resources={r"/api/*": {"origins": "*"}},
+         supports_credentials=True,
+         allow_headers=["Content-Type", "Authorization"],
+         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
     
     # Registra blueprints (sem prefixo adicional, pois já está definido no blueprint)
     from app.routes.user_routes import user_bp
