@@ -18,8 +18,8 @@ class Config:
     JWT_ACCESS_TOKEN_EXPIRES = int(os.environ.get('JWT_ACCESS_TOKEN_EXPIRES', 3600))
     
     # Configurações do CORS
-    CORS_HEADERS = 'Content-Type'
-    CORS_ORIGINS = ['http://localhost:3000', 'https://localhost:3000']
+    CORS_HEADERS = 'Content-Type, Authorization'
+    CORS_ORIGINS = ['http://localhost:3000', 'https://localhost:3000', '*']
     CORS_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
     
     def __init__(self):
