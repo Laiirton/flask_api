@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, current_app
 from app.services.user_service import UserService
-from app.utils.auth import generate_token, token_required, admin_required
+from app.utils.auth import generate_token
 
 # Cria blueprint
 user_bp = Blueprint('user', __name__, url_prefix='/api/users')
@@ -54,10 +54,9 @@ def login():
     }), 200
 
 @user_bp.route('/', methods=['GET'])
-@admin_required
 def get_all_users():
     """
-    Obter todos os usuários (apenas administrador)
+    Obter todos os usuários
     """
     users, error = UserService.get_all_users()
     
@@ -71,15 +70,10 @@ def get_all_users():
     }), 200
 
 @user_bp.route('/<int:user_id>', methods=['GET'])
-@token_required
 def get_user(user_id):
     """
     Obter um usuário pelo ID
     """
-    # Verifica se o usuário tem permissão para acessar este recurso
-    if request.user_role != 'admin' and request.user_id != user_id:
-        return jsonify({'error': 'Acesso não autorizado'}), 403
-    
     user, error = UserService.get_user_by_id(user_id)
     
     if error:
@@ -92,21 +86,11 @@ def get_user(user_id):
     }), 200
 
 @user_bp.route('/<int:user_id>', methods=['PUT'])
-@token_required
 def update_user(user_id):
     """
     Atualizar um usuário
     """
-    # Verifica se o usuário tem permissão para acessar este recurso
-    if request.user_role != 'admin' and request.user_id != user_id:
-        return jsonify({'error': 'Acesso não autorizado'}), 403
-    
     data = request.get_json()
-    
-    # Impede escalação de função por não-administradores
-    if 'role' in data and request.user_role != 'admin':
-        del data['role']
-    
     user, error = UserService.update_user(user_id, data)
     
     if error:
@@ -119,10 +103,9 @@ def update_user(user_id):
     }), 200
 
 @user_bp.route('/<int:user_id>', methods=['DELETE'])
-@admin_required
 def delete_user(user_id):
     """
-    Excluir um usuário (apenas administrador)
+    Excluir um usuário
     """
     success, error = UserService.delete_user(user_id)
     
@@ -135,12 +118,15 @@ def delete_user(user_id):
     }), 200
 
 @user_bp.route('/me', methods=['GET'])
-@token_required
 def get_current_user():
     """
-    Obter o usuário atualmente logado
+    Obter o usuário pelo ID fornecido
     """
-    user, error = UserService.get_user_by_id(request.user_id)
+    user_id = request.args.get('id')
+    if not user_id:
+        return jsonify({'error': 'ID do usuário é obrigatório'}), 400
+        
+    user, error = UserService.get_user_by_id(user_id)
     
     if error:
         return jsonify({'error': error}), 404
