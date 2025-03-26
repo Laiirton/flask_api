@@ -21,9 +21,9 @@ def create_app(config_class=Config):
         }
     })
     
-    # Registra blueprints com prefixo /api
+    # Registra blueprints (sem prefixo adicional, pois já está definido no blueprint)
     from app.routes.user_routes import user_bp
-    app.register_blueprint(user_bp, url_prefix='/api')
+    app.register_blueprint(user_bp)
     
     # Rota de verificação de saúde também com prefixo /api
     @app.route('/api/health')
