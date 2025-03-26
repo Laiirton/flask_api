@@ -12,21 +12,21 @@ def create_app(config_class=Config):
     # Configura a aplicação
     app.config.from_object(config_class)
     
-    # Configura CORS com as configurações específicas
+    # Configura CORS especificamente para rotas /api
     CORS(app, resources={
-        r"/*": {
+        r"/api/*": {
             "origins": app.config['CORS_ORIGINS'],
             "methods": app.config['CORS_METHODS'],
             "allow_headers": app.config['CORS_HEADERS']
         }
     })
     
-    # Registra blueprints
+    # Registra blueprints com prefixo /api
     from app.routes.user_routes import user_bp
-    app.register_blueprint(user_bp)
+    app.register_blueprint(user_bp, url_prefix='/api')
     
-    # Adiciona uma rota simples de verificação de saúde
-    @app.route('/health')
+    # Rota de verificação de saúde também com prefixo /api
+    @app.route('/api/health')
     def health_check():
         return {'status': 'ok'}, 200
     
