@@ -56,17 +56,13 @@ class UserService:
             
         except Exception as e:
             return None, str(e)
-    
+        
     @staticmethod
-    def authenticate_user(cpf: str, birth_date: str) -> Tuple[User, Optional[str]]:
+    def authenticate_user(username: str, birth_date: str) -> Tuple[User, Optional[str]]:
         """
-        Autentica um usuário com CPF e data de nascimento
+        Autentica um usuário com username e data de nascimento
         Retorna o usuário autenticado ou uma mensagem de erro
         """
-        # Valida o formato do CPF
-        if not validate_cpf(cpf):
-            return None, "Formato de CPF inválido"
-        
         # Valida o formato da data de nascimento
         if not validate_birth_date(birth_date):
             return None, "Formato de data de nascimento inválido. Use AAAA-MM-DD"
@@ -75,8 +71,8 @@ class UserService:
             # Conecta ao Supabase
             supabase = Config.get_supabase_client()
             
-            # Consulta o banco de dados
-            response = supabase.table('users').select('*').eq('cpf', cpf).eq('birth_date', birth_date).execute()
+            # Consulta o banco de dados (usando o email como username)
+            response = supabase.table('users').select('*').eq('email', username).eq('birth_date', birth_date).execute()
             
             # Verifica se o usuário existe
             if not response.data:

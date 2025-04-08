@@ -19,7 +19,7 @@ class Config:
     
     # Configurações do CORS
     CORS_HEADERS = 'Content-Type, Authorization'
-    CORS_ORIGINS = ['http://localhost:3000', 'https://localhost:3000', '*']
+    CORS_ORIGINS = ['http://localhost:3000', 'http://localhost:8081', 'exp://192.168.0.4:8081', '*']
     CORS_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
     
     def __init__(self):

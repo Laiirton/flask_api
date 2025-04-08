@@ -27,16 +27,16 @@ def register():
 @user_bp.route('/login', methods=['POST'])
 def login():
     """
-    Login de usuário com CPF e data de nascimento
+    Login de usuário com username e data de nascimento
     """
     data = request.get_json()
     
     # Verifica campos obrigatórios
-    if 'cpf' not in data or 'birth_date' not in data:
-        return jsonify({'error': 'CPF e data de nascimento são obrigatórios'}), 400
+    if 'username' not in data or 'birth_date' not in data:
+        return jsonify({'error': 'Username e data de nascimento são obrigatórios'}), 400
     
     # Autentica usuário
-    user, error = UserService.authenticate_user(data['cpf'], data['birth_date'])
+    user, error = UserService.authenticate_user(data['username'], data['birth_date'])
     
     if error:
         return jsonify({'error': error}), 401
